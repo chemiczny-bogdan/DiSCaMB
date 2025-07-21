@@ -216,6 +216,184 @@ namespace {
 
     }
 
+void calculate_def_val_pg_2(
+        const std::vector<std::vector<double> >& p_lm, // coefficients for multipolar terms (with wavefunction normalization of spherical harmonics)
+        const std::vector<double>& radial,
+        int l_max,
+        const std::vector <std::vector<double> >& sphericalHarmonics,
+        //const std::vector<int>& symmetryOperationsOrder,
+        std::vector<std::complex<double> >& defVal)
+    {
+        assert(defVal.size() == 4);
+
+
+        if (l_max < 0)
+        {
+            defVal[0] = 0.0;
+            defVal[1] = 0.0;
+            defVal[2] = 0.0;
+            defVal[3] = 0.0;
+            return;
+        }
+
+        /*
+        X,Y,Z
+        -X,-Y,Z
+        -X,Y,-Z
+        X,-Y,-Z
+        */
+
+        double v1_real = 0;
+        double v2_real = 0;
+        double v1_imag = 0;
+        double v2_imag = 0; 
+
+        /*
+                                     1      C2(y)   
+                                   x,y,z   -x,y,-z  
+
+         0  0                        1       1      
+         1 -1   y                    1       1      
+         1  0   z                    1      -1      
+         1  1   x                    1      -1      
+         2 -2   xy                   1      -1      
+         2 -1   yz                   1      -1      
+         2  0   3zz-rr               1       1      
+         2  1   xz                   1       1      
+         2  2   xx-yy                1       1      
+         3 -3   y(3xx-yy)            1       1      
+         3 -2   xyz                  1       1      
+         3 -1   y(5zz-yy)            1       1      
+         3  0   z(5zz-3rr)           1      -1      
+         3  1   x(5zz-rr)            1      -1      
+         3  2   z(xx-yy)             1      -1      
+         3  3   x(xx-3yy)            1      -1      
+         4 -4   xy(xx-yy)            1      -1      
+         4 -3   yz(3xx-yy)           1      -1      
+         4 -2   xy(7zz-rr)           1      -1      
+         4 -1   yz(7zz-3rr)          1      -1      
+         4  0   35z4-30zzrr+3r4      1       1      
+         4  1   xz(7zz-3rr)          1       1      
+         4  2   (xx-yy)(7zz-rr)      1       1      
+         4  3   xz(xx-3yy)           1       1      
+         4  4   x4-6xxyy+y4          1       1      
+
+        sorted
+                                   x,y,z   -x,y,-z  
+    v1
+         0  0                        1       1      
+         2  0   3zz-rr               1       1      
+         2  2   xx-yy                1       1      
+         3 -2   xyz                  1       1      
+         4  0   35z4-30zzrr+3r4      1       1      
+         4  2   (xx-yy)(7zz-rr)      1       1      
+         4  4   x4-6xxyy+y4          1       1      
+         2  1   xz                   1       1    
+         1 -1   y                    1       1    
+         3 -3   y(3xx-yy)            1       1    
+         3 -1   y(5zz-yy)            1       1    
+         4  1   xz(7zz-3rr)          1       1    
+         4  3   xz(xx-3yy)           1       1    
+    v2
+         1  0   z                    1      -1      
+         2 -2   xy                   1      -1      
+         3  0   z(5zz-3rr)           1      -1      
+         3  2   z(xx-yy)             1      -1      
+         4 -4   xy(xx-yy)            1      -1      
+         4 -2   xy(7zz-rr)           1      -1      
+         1  1   x                    1      -1      
+         2 -1   yz                   1      -1      
+         3  1   x(5zz-rr)            1      -1      
+         3  3   x(xx-3yy)            1      -1      
+         4 -3   yz(3xx-yy)           1      -1      
+         4 -1   yz(7zz-3rr)          1      -1      
+
+
+        */
+
+        v1_real += radial[0] * p_lm[0][0] * sphericalHarmonics[0][0];
+        double angular;
+
+
+
+        if (l_max > 0)
+        {
+
+            const int l1 = 1;
+            v2_imag += radial[1] * p_lm[1][0 + l1] * sphericalHarmonics[1][0 + l1];
+            v3_imag += radial[1] * p_lm[1][-1 + l1] * sphericalHarmonics[1][-1 + l1];
+            v4_imag += radial[1] * p_lm[1][1 + l1] * sphericalHarmonics[1][1 + l1];
+
+            if (l_max > 1)
+            {
+                const int l2 = 2;
+
+                v1_real -= radial[2] * (p_lm[2][0 + l2] * sphericalHarmonics[2][0 + l2] + p_lm[2][2 + l2] * sphericalHarmonics[2][2 + l2]);
+                v2_real -= radial[2] * p_lm[2][-2 + l2] * sphericalHarmonics[2][-2 + l2];
+                v3_real -= radial[2] * p_lm[2][1 + l2] * sphericalHarmonics[2][1 + l2];
+                v4_real -= radial[2] * p_lm[2][-1 + l2] * sphericalHarmonics[2][-1 + l2];
+
+                if (l_max > 2)
+                {
+                    {
+                        const int l3 = 3;
+                        v1_imag -= radial[3] * p_lm[3][-2 + l3] * sphericalHarmonics[3][-2 + l3];
+                        v2_imag -= radial[3] * (p_lm[3][0 + l3] * sphericalHarmonics[3][0 + l3] + p_lm[3][2 + l3] * sphericalHarmonics[3][2 + l3]);
+                        v3_imag -= radial[3] * (p_lm[3][-3 + l3] * sphericalHarmonics[3][-3 + l3] + p_lm[3][-1 + l3] * sphericalHarmonics[3][-1 + l3]);
+                        v4_imag -= radial[3] * (p_lm[3][1 + l3] * sphericalHarmonics[3][1 + l3] + p_lm[3][3 + l3] * sphericalHarmonics[3][3 + l3]);
+                    }
+
+                    if (l_max > 3)
+                    {
+                        /*
+            v1
+                 4  0   35z4-30zzrr+3r4      1       1          1          1
+                 4  2   (xx-yy)(7zz-rr)      1       1          1          1
+                 4  4   x4-6xxyy+y4          1       1          1          1
+            v2
+                 4 -4   xy(xx-yy)            1       1         -1         -1
+                 4 -2   xy(7zz-rr)           1       1         -1         -1
+            v3
+                 4  1   xz(7zz-3rr)          1      -1          1         -1
+                 4  3   xz(xx-3yy)           1      -1          1         -1
+            v4
+                 4 -3   yz(3xx-yy)           1      -1         -1          1
+                 4 -1   yz(7zz-3rr)          1      -1         -1          1
+
+                        */
+                        {
+                            const int l4 = 4;
+                            v1_real += radial[4] * (p_lm[4][0 + l4] * sphericalHarmonics[4][0 + l4] + p_lm[4][2 + l4] * sphericalHarmonics[4][2 + l4] +
+                                p_lm[4][4 + l4] * sphericalHarmonics[4][4 + l4]);
+                            v2_real += radial[4] * (p_lm[4][-4 + l4] * sphericalHarmonics[4][-4 + l4] + p_lm[4][-2 + l4] * sphericalHarmonics[4][-2 + l4]);
+                            v3_real += radial[4] * (p_lm[4][1 + l4] * sphericalHarmonics[4][1 + l4] + p_lm[4][3 + l4] * sphericalHarmonics[4][3 + l4]);
+                            v4_real += radial[4] * (p_lm[4][-1 + l4] * sphericalHarmonics[4][-1 + l4] + p_lm[4][-3 + l4] * sphericalHarmonics[4][-3 + l4]);
+
+                        }
+                    } // l_max>3
+                } // l_max>2
+            } // l_max>1
+        } // l_max>0
+
+        /*
+                                   x,y,z   -x,-y,z    -x,y,-z    x,-y,-z
+    v1
+                                     1       1          1          1
+    v2
+                                     1       1         -1         -1
+    v3
+                                     1      -1          1         -1
+    v4
+                                     1      -1         -1          1
+        */
+
+        defVal[0] = 4 * M_PI * std::complex<double>(v1_real + v2_real + v3_real + v4_real, v1_imag + v2_imag + v3_imag + v4_imag);
+        defVal[1] = 4 * M_PI * std::complex<double>(v1_real + v2_real - v3_real - v4_real, v1_imag + v2_imag - v3_imag - v4_imag);
+        defVal[2] = 4 * M_PI * std::complex<double>(v1_real - v2_real + v3_real - v4_real, v1_imag - v2_imag + v3_imag - v4_imag);
+        defVal[3] = 4 * M_PI * std::complex<double>(v1_real - v2_real - v3_real + v4_real, v1_imag - v2_imag - v3_imag + v4_imag);
+
+    }
+
     void calculate_def_val_pg_222_l4(
         const std::vector<std::vector<double> >& p_lm, // coefficients for multipolar terms (with wavefunction normalization of spherical harmonics)
         const std::vector<double>& radial,
