@@ -432,6 +432,60 @@ void calculate_def_val_pg_2(
 
     }
 
+    void calculate_def_val_pg_2_l4(
+        const std::vector<std::vector<double> >& p_lm, // coefficients for multipolar terms (with wavefunction normalization of spherical harmonics)
+        const std::vector<double>& radial,
+        int l_max,
+        const std::vector <std::vector<double> >& sphericalHarmonics,
+        //const std::vector<int>& symmetryOperationsOrder,
+        std::vector<std::complex<double> >& defVal)
+    {
+        assert(defVal.size() == 2);
+
+
+        if (l_max < 0)
+        {
+            defVal[0] = 0.0;
+            defVal[1] = 0.0;
+            defVal[2] = 0.0;
+            defVal[3] = 0.0;
+            return;
+        }
+
+        double v1_real = 0;
+        double v2_real = 0;
+        double v1_imag = 0;
+        double v2_imag = 0; 
+
+        v1_real += radial[0] * p_lm[0][0] * sphericalHarmonics[0][0];
+        double angular;
+
+        const int l1 = 1;
+        v1_imag += radial[1] * p_lm[1][-1 + l1] * sphericalHarmonics[1][-1 + l1];
+        v2_imag += radial[1] * (p_lm[1][0 + l1] * sphericalHarmonics[1][0 + l1] + p_lm[1][1 + l1] * sphericalHarmonics[1][1 + l1]);
+
+        const int l2 = 2
+        v1_real -= radial[2] * (p_lm[2][0 + l2] * sphericalHarmonics[2][0 + l2] + p_lm[2][2 + l2] * sphericalHarmonics[2][2 + l2] 
+            + p_lm[2][1 + l2] * sphericalHarmonics[2][1 + l2]);
+        v2_real -= radial[2] * (p_lm[2][-2 + l2] * sphericalHarmonics[2][-2 + l2] + p_lm[2][-1 + l2] * sphericalHarmonics[2][-1 + l2]);
+
+        const int l3 = 3;
+        v1_imag -= radial[3] * (p_lm[3][-2 + l3] * sphericalHarmonics[3][-2 + l3] + p_lm[3][-3 + l3] * sphericalHarmonics[3][-3 + l3] 
+            + p_lm[3][-1 + l3] * sphericalHarmonics[3][-1 + l3]);
+        v2_imag -= radial[3] * (p_lm[3][0 + l3] * sphericalHarmonics[3][0 + l3] + p_lm[3][2 + l3] * sphericalHarmonics[3][2 + l3]) 
+            + p_lm[3][1 + l3] * sphericalHarmonics[3][1 + l3] + p_lm[3][3 + l3] * sphericalHarmonics[3][3 + l3]);
+
+        const int l4 = 4;
+        v1_real += radial[4] * (p_lm[4][0 + l4] * sphericalHarmonics[4][0 + l4] + p_lm[4][2 + l4] * sphericalHarmonics[4][2 + l4] +
+            p_lm[4][4 + l4] * sphericalHarmonics[4][4 + l4] p_lm[4][1 + l4] * sphericalHarmonics[4][1 + l4] + p_lm[4][3 + l4] * sphericalHarmonics[4][3 + l4]);
+        v2_real += radial[4] * (p_lm[4][-4 + l4] * sphericalHarmonics[4][-4 + l4] + p_lm[4][-2 + l4] * sphericalHarmonics[4][-2 + l4] + 
+            p_lm[4][-1 + l4] * sphericalHarmonics[4][-1 + l4] + p_lm[4][-3 + l4] * sphericalHarmonics[4][-3 + l4]);
+
+        defVal[0] = 4 * M_PI * std::complex<double>(v1_real + v2_real, v1_imag + v2_imag);
+        defVal[1] = 4 * M_PI * std::complex<double>(v1_real - v2_real, v1_imag - v2_imag);
+
+    }
+
 
     void calculate_def_val_pg_222_nosymm(
         const std::vector<std::vector<double> >& p_lm, // coefficients for multipolar terms (with wavefunction normalization of spherical harmonics)
