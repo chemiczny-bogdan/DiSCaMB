@@ -337,7 +337,7 @@ void calculate_def_val_pg_2(
                         const int l3 = 3;
                         v1_imag -= radial[3] * (p_lm[3][-2 + l3] * sphericalHarmonics[3][-2 + l3] + p_lm[3][-3 + l3] * sphericalHarmonics[3][-3 + l3] 
                             + p_lm[3][-1 + l3] * sphericalHarmonics[3][-1 + l3]);
-                        v2_imag -= radial[3] * (p_lm[3][0 + l3] * sphericalHarmonics[3][0 + l3] + p_lm[3][2 + l3] * sphericalHarmonics[3][2 + l3]) 
+                        v2_imag -= radial[3] * (p_lm[3][0 + l3] * sphericalHarmonics[3][0 + l3] + p_lm[3][2 + l3] * sphericalHarmonics[3][2 + l3] 
                             + p_lm[3][1 + l3] * sphericalHarmonics[3][1 + l3] + p_lm[3][3 + l3] * sphericalHarmonics[3][3 + l3]);
 
                     }
@@ -363,7 +363,7 @@ void calculate_def_val_pg_2(
                         {
                             const int l4 = 4;
                             v1_real += radial[4] * (p_lm[4][0 + l4] * sphericalHarmonics[4][0 + l4] + p_lm[4][2 + l4] * sphericalHarmonics[4][2 + l4] +
-                                p_lm[4][4 + l4] * sphericalHarmonics[4][4 + l4] p_lm[4][1 + l4] * sphericalHarmonics[4][1 + l4] + p_lm[4][3 + l4] * sphericalHarmonics[4][3 + l4]);
+                                p_lm[4][4 + l4] * sphericalHarmonics[4][4 + l4] + p_lm[4][1 + l4] * sphericalHarmonics[4][1 + l4] + p_lm[4][3 + l4] * sphericalHarmonics[4][3 + l4]);
                             v2_real += radial[4] * (p_lm[4][-4 + l4] * sphericalHarmonics[4][-4 + l4] + p_lm[4][-2 + l4] * sphericalHarmonics[4][-2 + l4] + 
                                 p_lm[4][-1 + l4] * sphericalHarmonics[4][-1 + l4] + p_lm[4][-3 + l4] * sphericalHarmonics[4][-3 + l4]);
 
@@ -464,7 +464,7 @@ void calculate_def_val_pg_2(
         v1_imag += radial[1] * p_lm[1][-1 + l1] * sphericalHarmonics[1][-1 + l1];
         v2_imag += radial[1] * (p_lm[1][0 + l1] * sphericalHarmonics[1][0 + l1] + p_lm[1][1 + l1] * sphericalHarmonics[1][1 + l1]);
 
-        const int l2 = 2
+        const int l2 = 2;
         v1_real -= radial[2] * (p_lm[2][0 + l2] * sphericalHarmonics[2][0 + l2] + p_lm[2][2 + l2] * sphericalHarmonics[2][2 + l2] 
             + p_lm[2][1 + l2] * sphericalHarmonics[2][1 + l2]);
         v2_real -= radial[2] * (p_lm[2][-2 + l2] * sphericalHarmonics[2][-2 + l2] + p_lm[2][-1 + l2] * sphericalHarmonics[2][-1 + l2]);
@@ -472,12 +472,12 @@ void calculate_def_val_pg_2(
         const int l3 = 3;
         v1_imag -= radial[3] * (p_lm[3][-2 + l3] * sphericalHarmonics[3][-2 + l3] + p_lm[3][-3 + l3] * sphericalHarmonics[3][-3 + l3] 
             + p_lm[3][-1 + l3] * sphericalHarmonics[3][-1 + l3]);
-        v2_imag -= radial[3] * (p_lm[3][0 + l3] * sphericalHarmonics[3][0 + l3] + p_lm[3][2 + l3] * sphericalHarmonics[3][2 + l3]) 
+        v2_imag -= radial[3] * (p_lm[3][0 + l3] * sphericalHarmonics[3][0 + l3] + p_lm[3][2 + l3] * sphericalHarmonics[3][2 + l3] 
             + p_lm[3][1 + l3] * sphericalHarmonics[3][1 + l3] + p_lm[3][3 + l3] * sphericalHarmonics[3][3 + l3]);
 
         const int l4 = 4;
         v1_real += radial[4] * (p_lm[4][0 + l4] * sphericalHarmonics[4][0 + l4] + p_lm[4][2 + l4] * sphericalHarmonics[4][2 + l4] +
-            p_lm[4][4 + l4] * sphericalHarmonics[4][4 + l4] p_lm[4][1 + l4] * sphericalHarmonics[4][1 + l4] + p_lm[4][3 + l4] * sphericalHarmonics[4][3 + l4]);
+            p_lm[4][4 + l4] * sphericalHarmonics[4][4 + l4] + p_lm[4][1 + l4] * sphericalHarmonics[4][1 + l4] + p_lm[4][3 + l4] * sphericalHarmonics[4][3 + l4]);
         v2_real += radial[4] * (p_lm[4][-4 + l4] * sphericalHarmonics[4][-4 + l4] + p_lm[4][-2 + l4] * sphericalHarmonics[4][-2 + l4] + 
             p_lm[4][-1 + l4] * sphericalHarmonics[4][-1 + l4] + p_lm[4][-3 + l4] * sphericalHarmonics[4][-3 + l4]);
 
