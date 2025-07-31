@@ -1994,6 +1994,8 @@ void HansenCoppens_SF_EngineSymm::calculateSF_SerialAcentric(
     def_val_calculator = nullptr;
     if (point_group_name == "222")
         def_val_calculator = calculate_def_val_pg_222_l4;// calculateDefVal_pg_222;
+    if (point_group_name == "2")
+        def_val_calculator = calculate_def_val_pg_2_l4;
 
     void (*def_val_calculator_any_symm)(
         const std::vector<std::vector<REAL> >&p_lm,
