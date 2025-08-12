@@ -231,8 +231,6 @@ void calculate_def_val_pg_2(
         {
             defVal[0] = 0.0;
             defVal[1] = 0.0;
-            defVal[2] = 0.0;
-            defVal[3] = 0.0;
             return;
         }
 
